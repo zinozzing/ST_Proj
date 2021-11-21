@@ -94,8 +94,10 @@ def main_crawling(end,option,keyword):
 
 ### main function section
 def main():
-    num = int(input("1페이지부터 원하는 페이지의 범위: "))
-    opt = input("원하는 데이터의 수집 기간(ex. 0 = 전체 , 1 = 1시간, 2 = 1일, 3 = 1주, 4 = 1개월, 5 = 3개월, 6 = 6개월, 7 = 1년): ")
+    # num = int(input("1페이지부터 원하는 페이지의 범위: "))
+    # opt = input("원하는 데이터의 수집 기간(ex. 0 = 전체 , 1 = 1시간, 2 = 1일, 3 = 1주, 4 = 1개월, 5 = 3개월, 6 = 6개월, 7 = 1년): ")
+    num = 3 # 3페이지까지 수집(90개)
+    opt = 7 # 기간 = 1년
     keyw = input("크롤링을 원하는 단어: ")
     main_crawling(num,opt,keyw)
 
