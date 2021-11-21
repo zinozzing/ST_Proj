@@ -35,11 +35,10 @@ def text_scraping(url):
 
 # CSV 파일 저장 함수
 def toCSV(temp_list):
-    with open('blog_crawling.csv', 'w', encoding='utf-8-sig', newline='') as file : # encoding UTF-8 XXX -> must utf-8-sig
+    with open('blog_crawling.csv', 'a', encoding='utf-8-sig', newline='') as file : # encoding UTF-8 XXX -> must utf-8-sig
         csvfile = csv.writer(file)
         for row in temp_list:
-            csvfile.writerow(row)
-    print("csv 저장 완료")  
+            csvfile.writerow(row) 
 
 def main_crawling(end,option,keyword):
     for i in range(1,end*30,30):
@@ -89,10 +88,8 @@ def main_crawling(end,option,keyword):
             
             # CSV를 제작을 위한 리스트
             temp_list.append([post_title,post_link,post_time,blog_text])
-    return temp_list            
-        
-
-
+        toCSV(temp_list)         
+    print("csv 저장 완료")     
 
 
 ### main function section
@@ -100,9 +97,7 @@ def main():
     num = int(input("1페이지부터 원하는 페이지의 범위: "))
     opt = input("원하는 데이터의 수집 기간(ex. 0 = 전체 , 1 = 1시간, 2 = 1일, 3 = 1주, 4 = 1개월, 5 = 3개월, 6 = 6개월, 7 = 1년): ")
     keyw = input("크롤링을 원하는 단어: ")
-    output = main_crawling(num,opt,keyw)
-    # CSV 파일 제작
-    toCSV(output)
+    main_crawling(num,opt,keyw)
 
 if __name__ == "__main__":
 	main()
