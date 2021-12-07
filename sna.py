@@ -23,7 +23,7 @@ import random as rd
     - pagerank
 """
 
-def return_centralities_as_dict(input_g):
+def return_centralities_as_li(input_g):
     # weighted degree centrality를 딕셔너리로 리턴
     def return_weighted_degree_centrality(input_g, normalized=False):
         w_d_centrality = {n:0.0 for n in input_g.nodes()}
@@ -45,12 +45,12 @@ def return_centralities_as_dict(input_g):
         return nx.betweenness_centrality(input_g, weight='weight')
     def return_pagerank(input_g):
         return nx.pagerank(input_g, weight='weight')
-    return {
-        'weighted_deg':return_weighted_degree_centrality(input_g),
-        'closeness_cent':return_closeness_centrality(input_g), 
-        'betweeness_cent':return_betweenness_centrality(input_g),
-        'pagerank':return_pagerank(input_g)
-    }
+    return [
+        return_weighted_degree_centrality(input_g),
+        return_closeness_centrality(input_g), 
+        return_betweenness_centrality(input_g),
+        return_pagerank(input_g)
+    ]
 
 
 # data = pd.read_csv('도시별_긍부정지수_및_긍부정단어목록/긍부정단어목록.csv')
@@ -171,11 +171,18 @@ weigh_deg = []
 cloness_cent = []
 between_cent = []
 page_rank = []
-
+all_li = [weigh_deg, cloness_cent, between_cent, page_rank]
 
 # 중심성 구하기
-for k, v in list(return_centralities_as_dict(G).items()):
-    result = "{}: {}".format(k, v)
+# for k, v in list(return_centralities_as_dict(G).items())[:
+#     # weigh_deg.append(k,v)
+#     # cloness_cent.appned(k,v)
+#     # between_cent.append(k,v)
+#     # page_rank.append(k,v)
+#     print(k,v)
+
+for i in range(0,len(return_centralities_as_li(G))):
+    all_li[i].append(return_centralities_as_li(G)[i])
 
 
 # 그래프를 출력합니다.
