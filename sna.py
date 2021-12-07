@@ -147,4 +147,4 @@ print("eigenvector centrality: ",sorted(eigenvector, key=lambda x: x[1], reverse
 
 # 그래프를 출력합니다.
 ax = plt.gca()
-plt.show()
+plt.show() 
