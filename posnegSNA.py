@@ -13,23 +13,19 @@ from apyori import apriori
 import networkx as nx
 import random as rd
 
-
-city_list = ['bangkok','cebu','danang','fukuoka','hanoi','hongkong','osaka','sapporo','taipei','tokyo']
-data = pd.DataFrame()
-
-for city in city_list:     ######
-    #데이터전처리
-    df = pd.read_csv('travel_csv/'+city+'_blog_crawling.csv', header=None)
-    data = pd.concat([data,df],axis=0)
-df = data.iloc[:,0:1].reset_index()
-
+df = pd.read_csv('도시별_긍부정지수_및_긍부정단어목록/긍부정단어목록.csv', header=None)
+df = df.iloc[:,0:5]
+df['pos'] = df[1]+df[2]
+df['neg'] = df[3]+df[4]
+df.drop([0,1,2,3,4], axis=1, inplace=True)
+df = df.iloc[1:]
 
 def text_cleaning(text):
     hangul = re.compile('[^ ㄱ-ㅣ가-힣]+') 
     result = hangul.sub('', text)
     return result
 
-df['ko_text'] = df[0].apply(lambda x : text_cleaning(x))
+df['ko_text'] = df['pos'].apply(lambda x : text_cleaning(x))  #pos neg 조절
 
 
 stopwords = ['여행','타이베이','있는']
@@ -52,9 +48,9 @@ transactions = [transaction for transaction in transactions if transaction] # �
 
 # 연관 분석을 수행합니다.
 results = list(apriori(transactions,
-    min_support=0.01,       #지지도 - 표시되는 노드수가 많아짐
-    min_confidence=0.05,    #신뢰도 - 선의 갯수가 달라짐
-    min_lift=2,
+    min_support=0.3,
+    min_confidence=0.5,
+    min_lift=1.5,
     max_length=2))
 
 # 데이터 프레임 형태로 정리합니다.
@@ -90,7 +86,6 @@ plt.figure(figsize=(25,25))
 # networkx 그래프 객체를 생성합니다.
 G = nx.Graph()
 
-
 # node_df의 키워드 빈도수를 데이터로 하여, 네트워크 그래프의 ‘노드’ 역할을 하는 원을 생성합니다.
 for index, row in node_df.iterrows():
     G.add_node(row['node'], nodesize=row['nodesize'])
@@ -98,7 +93,6 @@ for index, row in node_df.iterrows():
 # network_df의 연관 분석 데이터를 기반으로, 네트워크 그래프의 ‘관계’ 역할을 하는 선을 생성합니다.
 for index, row in network_df.iterrows():
     G.add_weighted_edges_from([(row['source'], row['target'], row['support'])])
-
 
 for u, v, d in G.edges(data=True):
     d['weight'] = rd.random()
@@ -115,13 +109,11 @@ pos = nx.spring_layout(G, k=0.6, iterations=50)
 nx.draw(G, pos=pos, node_size = [v * 20 for v in degree_dict.values()], edge_color=weights)
 
 
-
 #폰트설정
 font_fname = 'NanumGothic.ttf'
 fontprop=fm.FontProperties(fname=font_fname, size=18).get_name()
 
-
-nx.draw_networkx_labels(G, pos=pos, font_family=fontprop, font_size=15)
+nx.draw_networkx_labels(G, pos=pos, font_family=fontprop, font_size=25)
 
 
 deg_cent = []
@@ -145,5 +137,5 @@ print("eigenvector centrality: ",sorted(eigenvector, key=lambda x: x[1], reverse
 
 # 그래프를 출력합니다.
 ax = plt.gca()
-plt.savefig('allcitySNA.png')
+plt.savefig('posnegSNA.png')
 plt.show() 
