@@ -1,4 +1,3 @@
-#-*- coding:utf-8 -*-
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from networkx.classes.function import get_node_attributes
@@ -14,46 +13,6 @@ from apyori import apriori
 import networkx as nx
 import random as rd
 
-
-"""
-- graph로부터 다음 세 가지 centrality와 pagerank를 계산하여 딕셔너리로 리턴해주는 함수
-    - weighted degree centrality
-    - closeness centrality
-    - betweenness centrality
-    - pagerank
-"""
-
-def return_centralities_as_li(input_g):
-    # weighted degree centrality를 딕셔너리로 리턴
-    def return_weighted_degree_centrality(input_g, normalized=False):
-        w_d_centrality = {n:0.0 for n in input_g.nodes()}
-        for u, v, d in input_g.edges(data=True):
-            w_d_centrality[u]+=d['weight']
-            w_d_centrality[v]+=d['weight']
-        if normalized==True:
-            weighted_sum = sum(w_d_centrality.values())
-            return {k:v/weighted_sum for k, v in w_d_centrality.items()}
-        else:
-            return w_d_centrality
-    def return_closeness_centrality(input_g):
-        new_g_with_distance = input_g.copy()
-        for u,v,d in new_g_with_distance.edges(data=True):
-            if 'distance' not in d:
-                d['distance'] = 1.0/d['weight']
-        return nx.closeness_centrality(new_g_with_distance, distance='distance')
-    def return_betweenness_centrality(input_g):
-        return nx.betweenness_centrality(input_g, weight='weight')
-    def return_pagerank(input_g):
-        return nx.pagerank(input_g, weight='weight')
-    return [
-        return_weighted_degree_centrality(input_g),
-        return_closeness_centrality(input_g), 
-        return_betweenness_centrality(input_g),
-        return_pagerank(input_g)
-    ]
-
-
-# data = pd.read_csv('도시별_긍부정지수_및_긍부정단어목록/긍부정단어목록.csv')
 
 city_list = ['bangkok','cebu','danang','fukuoka','hanoi','hongkong','osaka','sapporo','taipei','tokyo']
 data = pd.DataFrame()
@@ -167,22 +126,23 @@ fontprop=fm.FontProperties(fname=font_fname, size=18).get_name()
 nx.draw_networkx_labels(G, pos=pos, font_family=fontprop, font_size=15)
 
 
-weigh_deg = []
-cloness_cent = []
+deg_cent = []
+closeness_cent = []
 between_cent = []
-page_rank = []
-all_li = [weigh_deg, cloness_cent, between_cent, page_rank]
+eigenvector = []
 
-# 중심성 구하기
-# for k, v in list(return_centralities_as_dict(G).items())[:
-#     # weigh_deg.append(k,v)
-#     # cloness_cent.appned(k,v)
-#     # between_cent.append(k,v)
-#     # page_rank.append(k,v)
-#     print(k,v)
 
-for i in range(0,len(return_centralities_as_li(G))):
-    all_li[i].append(return_centralities_as_li(G)[i])
+for node in G.nodes():
+    deg_cent.append([node,nx.degree_centrality(G)[node]])
+    closeness_cent.append([node,nx.closeness_centrality(G, node)])
+    between_cent.append([node,nx.betweenness_centrality(G)[node]])
+    eigenvector.append([node,nx.eigenvector_centrality(G, max_iter=1000)[node]])
+
+## 중심성 별 상위 5개 출력
+print("degree centrality: ",sorted(deg_cent, key=lambda x: x[1], reverse=True)[0:6])
+print("closeness centrality: ",sorted(closeness_cent, key=lambda x: x[1], reverse=True)[0:6])
+print("betweeness centrality: ",sorted(between_cent, key=lambda x: x[1], reverse=True)[0:6])
+print("eigenvector centrality: ",sorted(eigenvector, key=lambda x: x[1], reverse=True)[0:6])
 
 
 # 그래프를 출력합니다.
