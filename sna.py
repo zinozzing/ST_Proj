@@ -118,7 +118,7 @@ nx.draw(G, pos=pos, node_size = [v * 20 for v in degree_dict.values()], edge_col
 
 #폰트설정
 font_fname = 'NanumGothic.ttf'
-fontprop=fm.FontProperties(fname=font_fname, size=18).get_name()
+fontprop=fm.FontProperties(fname=font_fname, size=11).get_name()
 
 
 nx.draw_networkx_labels(G, pos=pos, font_family=fontprop, font_size=15)
@@ -137,13 +137,44 @@ for node in G.nodes():
     eigenvector.append([node,nx.eigenvector_centrality(G, max_iter=1000)[node]])
 
 ## 중심성 별 상위 5개 출력
-print("degree centrality: ",sorted(deg_cent, key=lambda x: x[1], reverse=True)[0:6])
-print("closeness centrality: ",sorted(closeness_cent, key=lambda x: x[1], reverse=True)[0:6])
-print("betweeness centrality: ",sorted(between_cent, key=lambda x: x[1], reverse=True)[0:6])
-print("eigenvector centrality: ",sorted(eigenvector, key=lambda x: x[1], reverse=True)[0:6])
+degree_centrality = sorted(deg_cent, key=lambda x: x[1], reverse=True)[0:]
+closeness_centrality =sorted(closeness_cent, key=lambda x: x[1], reverse=True)[0:]
+betweeness_centrality = sorted(between_cent, key=lambda x: x[1], reverse=True)[0:]
+eigenvector_centrality = sorted(eigenvector, key=lambda x: x[1], reverse=True)[0:]
+
+cname = ['degree_cent','closeness_cent','betweeness_cent','eigenvec_cent']
+index = []
+result_deg = []
+result_clo = []
+result_bet = []
+result_eig = []
+for i in range(len(degree_centrality)):
+    index.append(degree_centrality[i][0])
+    result_deg.append(degree_centrality[i][1])
+    result_clo.append(closeness_centrality[i][1])
+    result_bet.append(betweeness_centrality[i][1])
+    result_eig.append(eigenvector_centrality[i][1])
+
+td = {
+    'deg_cent': result_deg,
+    'clo_cent' : result_clo,
+    'bet_cent' : result_bet,
+    'eig_cent' : result_eig
+}
+
+
+df1 = pd.DataFrame(td)
+df1.index = index
+df1.index.names = ['word']
+
+# 내림차순 정렬
+plt.rc('font', family=fontprop)
+df1.plot(kind='barh',title='중심성 시각화')
+plt.savefig('Centrality.png')
+plt.show()
 
 
 # 그래프를 출력합니다.
-ax = plt.gca()
-plt.savefig('allcitySNA.png')
-plt.show() 
+# ax = plt.gca()
+# plt.savefig('allcitySNA.png')
+# plt.show() 
