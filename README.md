@@ -140,3 +140,60 @@
    ![그림7](https://user-images.githubusercontent.com/50936176/147209326-d5eb953a-1720-4195-afa3-578d2d743ec2.png)
 
    `'뭔가 비싸기도 하고 불편하기도 하고 위생도 걱정되었기 때문인듯 합니다, '사람 많을까봐 걱정했는데…'`
+
+</br>
+
+## Part 5 : 관광지별 주요 연관 키워드 분석을 통한 호감/비호감 요인 서칭
+
+1. 관광지 도시별 키워드에 따른 중심성 계산 및 시각화(Degree Centrality, Closeness Centrality, Betweenness Centrality, Eigenvector Centrality)
+
+   ` dir > ST_PROJ/sna.py`
+
+   ```python
+   # 중심성 별 상위 5개 출력
+   degree_centrality = sorted(deg_cent, key=lambda x: x[1], reverse=True)[0:]
+   closeness_centrality =sorted(closeness_cent, key=lambda x: x[1], reverse=True)[0:]
+   betweeness_centrality = sorted(between_cent, key=lambda x: x[1], reverse=True)[0:]
+   eigenvector_centrality = sorted(eigenvector, key=lambda x: x[1], reverse=True)[0:]
+
+   cname = ['degree_cent','closeness_cent','betweeness_cent','eigenvec_cent']
+   index = []
+   result_deg = []
+   result_clo = []
+   result_bet = []
+   result_eig = []
+   for i in range(len(degree_centrality)):
+      index.append(degree_centrality[i][0])
+      result_deg.append(degree_centrality[i][1])
+      result_clo.append(closeness_centrality[i][1])
+      result_bet.append(betweeness_centrality[i][1])
+      result_eig.append(eigenvector_centrality[i][1])
+
+   td = {
+      'deg_cent': result_deg,
+      'clo_cent' : result_clo,
+      'bet_cent' : result_bet,
+      'eig_cent' : result_eig
+   }
+
+
+   df1 = pd.DataFrame(td)
+   df1.index = index
+   df1.index.names = ['word']
+
+   # 내림차순 정렬
+   plt.rc('font', family=fontprop)
+   df1.plot(kind='barh',title='중심성 시각화')
+   plt.savefig('Centrality.png')
+   plt.show()
+   ```
+
+   ![Centrality](https://user-images.githubusercontent.com/50936176/147210131-a147c2c5-371e-4fbd-894f-b79e81451d3f.png)
+
+   ➩ 각 노드 및 엣지의 특징을 알아볼 수 있도록 시각화의 필요성
+
+   ➩ 가중치를 통해 노드와 엣지의 특징을 시각화 할 수 있도록 !
+
+   </br>
+
+2. 각 노드 및 엣지별 시각화
