@@ -82,31 +82,31 @@
 
 1.  각 지역별 빈출단어 시각화(그래프)
 
-    ![그림1](https://user-images.githubusercontent.com/50936176/147207729-38178ce6-6104-43dc-af9b-4a942ac5bd48.png)
+![그림1](https://user-images.githubusercontent.com/50936176/147207729-38178ce6-6104-43dc-af9b-4a942ac5bd48.png)
 
-    ```python
-      #빈출단어 카운트
-      ko=nltk.Text(tokens_ko, name=city)
+```python
+#빈출단어 카운트
+ko=nltk.Text(tokens_ko, name=city)
 
-      #단어 빈도순 정렬
-      ko.vocab()
+#단어 빈도순 정렬
+ko.vocab()
 
-      #워드그래프
-      path = "c:/Windows/Fonts/malgun.ttf"
-      if platform.system() == 'Darwin':
-         rc('font', family='AppleGothic')
-      elif platform.system() == 'Windows':
-         font_name = font_manager.FontProperties(fname=path).get_name()
-         rc('font', family=font_name)
-      else:
-         print('Unknown system... sorry~~~~')
+#워드그래프
+path = "c:/Windows/Fonts/malgun.ttf"
+if platform.system() == 'Darwin':
+   rc('font', family='AppleGothic')
+elif platform.system() == 'Windows':
+   font_name = font_manager.FontProperties(fname=path).get_name()
+   rc('font', family=font_name)
+else:
+   print('Unknown system... sorry~~~~')
 
-      %matplotlib inline
-      plt.figure(figsize=(14,8))
-      plt.title(city)
-      ko.plot(50)
-      plt.show()
-    ```
+%matplotlib inline
+plt.figure(figsize=(14,8))
+plt.title(city)
+ko.plot(50)
+plt.show()
+```
 
 </br>
 
@@ -175,13 +175,9 @@
 
 </br>
 
-3. 다낭과 홍콩의 워드클라우드 분석
-
-   `<홍콩>`
+3. 다낭과 홍콩의 워드클라우드 분석(전: 홍콩, 후: 다낭)
 
    ![그림5](https://user-images.githubusercontent.com/50936176/147208988-1868e4f5-3b6f-4488-a977-2b195958401c.png)
-
-   `<다낭>`
 
    ![그림6](https://user-images.githubusercontent.com/50936176/147208996-51e2839c-9820-45da-8d84-10c6d01109da.png)
 
@@ -189,13 +185,9 @@
 
 </br>
 
-4. 후쿠오카와 세부의 워드클라우드 분석
-
-   `<세부>`
+4. 후쿠오카와 세부의 워드클라우드 분석(전: 세부, 후: 후쿠오카)
 
    ![그림4png](https://user-images.githubusercontent.com/50936176/147209321-450db9d7-83d3-4fb8-a9dd-84e703eda04a.png)
-
-   `<후쿠오카>`
 
    ![그림7](https://user-images.githubusercontent.com/50936176/147209326-d5eb953a-1720-4195-afa3-578d2d743ec2.png)
 
